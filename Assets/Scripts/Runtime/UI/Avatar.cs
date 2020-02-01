@@ -32,6 +32,11 @@ public class Avatar : MonoBehaviour
 	}
 
 
+	public void SetMood(Dev dev)
+	{
+		// set the mood of the dev
+	}
+
 	public void PostMood(Mood mood)
 	{
 		Debug.LogFormat("{0} is {1}", name, mood.Name);

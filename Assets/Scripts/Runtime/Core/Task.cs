@@ -62,11 +62,13 @@ public class Task
 
 	float bugPotential;
 
+// moving to Scheduler
+/*
 	public void StartDay()
 	{
 
 	}
-
+*/
 	public void AddProgress(float progress)
 	{
 		if (config.type == TaskType.Idle || config.type == TaskType.Relaxing)
@@ -74,12 +76,12 @@ public class Task
 
 		CurrentWork = Mathf.Min(CurrentWork + progress, config.work);
 	}
-
+/*
 	public void EndDay()
 	{
 
 	}
-
+*/
 	public Status GetStatus(Dev[] Devs)
 	{
 		List<Dev.Status> involvedDevs = new List<Dev.Status>();

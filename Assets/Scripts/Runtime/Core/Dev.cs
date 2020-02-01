@@ -38,7 +38,7 @@ public class Dev
 		this.config = config;
 		this.scenario = scenario;
 		this.manager = manager;
-		avatar = Object.Instantiate(config.avatar, Vector3.zero, Quaternion.identity);
+		avatar = Object.Instantiate(config.avatar, Vector3.zero, Quaternion.identity,DevParent);
 		avatar.Setup(this, manager.GetOffice());
 	}
 
@@ -102,4 +102,5 @@ public class Dev
 
 	public Task currentTask;
 	public Mood currentMood;
+	public Transform DevParent;
 }
