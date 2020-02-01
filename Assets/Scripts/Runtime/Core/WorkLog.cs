@@ -12,6 +12,7 @@ public static class WorkLog
 		var taskConfig = status.task.GetConfig();
 		var abilityFactor = dev.skill / taskConfig.difficulty;
 
+
 		// add more curves 'n' shit
 		float progress = dev.speed * status.motivation * abilityFactor;
 		float safety = status.focus * abilityFactor;

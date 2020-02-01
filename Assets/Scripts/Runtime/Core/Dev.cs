@@ -44,12 +44,7 @@ public class Dev
 		avatar.Setup(this, manager.GetOffice());
 	}
 
-	public void StartTick(bool isNewDay)
-	{
-		
-	}
-
-	public void EndTick()
+	public void Tick()
 	{
 		if (avatar.isMoving)
 			return;

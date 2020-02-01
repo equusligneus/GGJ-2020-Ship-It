@@ -92,13 +92,10 @@ public class Scenario
 		dev.TrySetTask(target);
 	}
 
-	public void Tick(bool isNewDay)
+	public void Tick()
 	{
 		foreach (var item in activeDevs)
-		{
-			item.EndTick();
-			item.StartTick(isNewDay);
-		}
+			item.Tick();
 
 		// check win?
 	}

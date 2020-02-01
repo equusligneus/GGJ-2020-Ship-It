@@ -1,39 +1,41 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Scheduler))]
 public class Manager : MonoBehaviour
 {
-	// Start is called before the first frame update
-	void Start()
-    {
-		if(!scenarioConfig)
-		{
-			enabled = false;
-			return;
-		}
+	private void Awake()
+		=> scheduler = GetComponent<Scheduler>();
 
-		scenario = new Scenario(scenarioConfig.config, this);
-		scenario.StartScenario();
-    }
+	public void SelectScenario(Config_Scenario scenario)
+	{
+		this.scenario = new Scenario(scenario.config, this);
+		scheduler.StartScenario(this);
+	}
 
-
-	public Scenario GetScenario()
-		=> scenario;
+	public void OnScenarioEnd()
+	{
+		throw new NotImplementedException();
+	}
 
 	public Office GetOffice()
 		=> office;
 
-	private Scenario scenario;
+	public TaskList GetTaskList()
+		=> taskList;
 
+	//public DevList GetDevList()
+	//	=> devList;
 
-	//UI
-	[SerializeField]
-	private Config_Scenario scenarioConfig;
+	public Scenario scenario { get; private set; }
+
+	private Scheduler scheduler;
+
 	[SerializeField]	
 	private TaskList taskList;
 
 	[SerializeField]
-	private Office office; 
-
+	private Office office;
 }
