@@ -7,7 +7,6 @@ using UnityEngine;
 	using System.Linq; 
 #endif
 
-[System.Serializable]
 public class Scenario
 {
 #if UNITY_EDITOR
@@ -24,7 +23,6 @@ public class Scenario
 		=> SetToTask(activeDevs[0], activeTasks.FirstOrDefault(t => t.GetTaskType() == TaskType.Idle));
 #endif
 
-	[System.Serializable]
 	public struct Config
 	{
 		public string name;
