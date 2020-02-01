@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Animator))]
@@ -9,6 +7,7 @@ public class SpeechBubble : MonoBehaviour
 	private void Awake()
 	{
 		animator = GetComponent<Animator>();
+		remainingViewTime = -1;
 	}
 
 	public void PostMood(Mood mood)
@@ -20,25 +19,28 @@ public class SpeechBubble : MonoBehaviour
 		if (content)
 			content.sprite = config.content;
 
+		remainingViewTime = viewTime;
 		animator.SetBool("Show", true);
 	}
-
-	// Start is called before the first frame update
-	void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(remainingViewTime > 0)
+		{
+			remainingViewTime -= Time.deltaTime;
+			if (remainingViewTime <= 0)
+				animator.SetBool("Show", false);
+		}
     }
 
 	[SerializeField]
 	private Image bubble;
 	[SerializeField]
 	private Image content;
+	[SerializeField]
+	private float viewTime;
 
+	private float remainingViewTime;
 	private Animator animator;
 }
