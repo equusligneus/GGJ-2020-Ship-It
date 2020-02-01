@@ -23,6 +23,7 @@ public class Scenario
 		=> SetToTask(activeDevs[0], activeTasks.FirstOrDefault(t => t.GetTaskType() == TaskType.Idle));
 #endif
 
+	[System.Serializable]
 	public struct Config
 	{
 		public string name;

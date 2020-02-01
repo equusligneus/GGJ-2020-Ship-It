@@ -6,7 +6,7 @@ public class Mood
 {
 	public enum ConditionType
 	{
-		Inactive,
+		Any,
 		ValueGreaterThan,
 		ValueLowerThan,
 	}
@@ -14,18 +14,26 @@ public class Mood
 	[System.Serializable]
 	public struct FollowUpMood
 	{
-		public ConditionType annoyanceCondition;
-		public float annoyanceValue;
+		public ConditionType motivationCondition;
+		public float motivationValue;
+		public ConditionType focusCondition;
+		public float focusValue;
 		public Config_Mood mood;
 
-		public bool CanChange(float annoyanceValue)
+		public bool CanChange(float motivation, float focus)
 		{
-			switch (annoyanceCondition)
+			return IsValid(motivationCondition, motivation, motivationValue) &&
+				IsValid(focusCondition, focus, focusValue);
+		}
+
+		private bool IsValid(ConditionType type, float value1, float value2)
+		{
+			switch (type)
 			{
 				case ConditionType.ValueGreaterThan:
-					return annoyanceValue > this.annoyanceValue;
+					return value1 > value2;
 				case ConditionType.ValueLowerThan:
-					return annoyanceValue < this.annoyanceValue;
+					return value1 < value2;
 				default:
 					return true;
 			}
@@ -59,21 +67,21 @@ public class Mood
 		this.config = config;
 	}
 
-	public Mood Tick(float annoyanceValue)
+	public Mood Tick(float motivation, float focus)
 	{
 		++ticks;
 
 		if (s_random.Next() < config.MoodChangePropabilityCurve.Evaluate(ticks))
-			return ChangeMood(annoyanceValue);
+			return ChangeMood(motivation, focus);
 
 		return this;
 	}
 
-	private Mood ChangeMood(float annoyanceValue)
+	private Mood ChangeMood(float motivation, float focus)
 	{
 		foreach (var item in config.followUps)
 		{
-			if (item.CanChange(annoyanceValue))
+			if (item.CanChange(motivation, focus))
 				return new Mood(item.mood.config);
 		}
 		return this;
