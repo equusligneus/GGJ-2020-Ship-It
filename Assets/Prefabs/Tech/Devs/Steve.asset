@@ -19,3 +19,4 @@ MonoBehaviour:
     maxAnnoyance: 42
     avatar: {fileID: 2245724781042666178, guid: 1e2b824f2a389d248ae9cf119c5d495d,
       type: 3}
+    avatarColor: {r: 0, g: 0.2627451, b: 0, a: 1}

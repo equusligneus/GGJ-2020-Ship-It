@@ -19,8 +19,9 @@ public class Task
 	{
 		public string name;
 		public TaskType type;
-		public float work;
+		public int importance;
 		public float difficulty;
+		public float work;
 		public float annoyance;
 		public int maxProgrammerNum;
 	}

@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   config:
     name: Work Work
-    programmers:
+    devs:
     - {fileID: 11400000, guid: 636808db56820c3429de28b665831800, type: 2}
     tasks:
     - {fileID: 11400000, guid: 38271e3ef045af842b3c986308425718, type: 2}
     - {fileID: 11400000, guid: aaf117011d486f147b6b05e80abb920a, type: 2}
     - {fileID: 11400000, guid: ebbb87a4c5b68c847bef54fd2b47998d, type: 2}
     - {fileID: 11400000, guid: 54f95e87ecc433947a51ba35a7a7d12c, type: 2}
+    neutralMood: {fileID: 11400000, guid: 5c7830e2ca903b44ca562ec74f7f7259, type: 2}
+    moods: []

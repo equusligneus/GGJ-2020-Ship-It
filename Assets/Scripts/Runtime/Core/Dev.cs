@@ -8,10 +8,13 @@ public class Dev
 	public struct Config
 	{
 		public string name;
-		public float maxSkill;
-		public float maxSpeed;
+		public float skill;
+		public AnimationCurve challengeEnjoymentCurve;
+		public float speed;
+
 		public float maxAnnoyance;
 		public Avatar avatar;
+		public Color avatarColor;
 	}
 
 	public struct Status
@@ -30,10 +33,13 @@ public class Dev
 		public TaskType currentTaskType;
 	}
 
-	public Dev(Config config)
+	public Dev(Config config, Scenario scenario, Manager manager)
 	{
 		this.config = config;
+		this.scenario = scenario;
+		this.manager = manager;
 		avatar = Object.Instantiate(config.avatar, Vector3.zero, Quaternion.identity);
+		avatar.Setup(this, manager.GetOffice());
 	}
 
 	public void StartTick(bool isNewDay)
@@ -41,24 +47,59 @@ public class Dev
 		
 	}
 
-	public void EndTick(Scenario scenario)
+	public void EndTick()
 	{
-		currentTask.AddProgress(config.maxSpeed);
+		if (avatar.isMoving)
+			return;
+
+		currentTask.AddProgress(config.speed);
 		
-		// TODO do some logic regarding this!!!
 		if (currentTask.IsDone)
-			scenario.SetSteveToIdle();
+			scenario.SetIdle(this);
+
+		if (currentMood == null)
+			currentMood = scenario.GetNeutralMood();
+
+		Mood newMood = currentMood.Tick(status.annoyance);
+		if (newMood != currentMood)
+		{
+			currentMood = newMood;
+			avatar.PostMood(currentMood);
+		}
+	}
+
+	public void TrySetTask(Task task)
+	{
+		if (currentTask == null)
+		{
+			avatar.TryMoveTo(task.GetTaskType());
+			currentTask = task;
+			return;
+		}
+
+		if (currentTask == task)
+			return;
+
+		// works on same workstation type or has open workstations
+		if (currentTask.GetTaskType() == task.GetTaskType() || avatar.TryMoveTo(task.GetTaskType()))
+			currentTask = task;
+		else
+			scenario.SetIdle(this); // TODO This might cause a StackOverflow!!! Fix reservations for idle!
 	}
 
 	public Status GetStatus()
-	{
-		return new Status(config, currentTask);
-	}
+		=> status;
 
-	[SerializeField]
+	public Config GetConfig()
+		=> config;
+
 	private Config config;
+	private Scenario scenario;
+	private Manager manager;
 
 	private Avatar avatar;
+	private Status status;
 
 	public Task currentTask;
+	public Mood currentMood;
 }

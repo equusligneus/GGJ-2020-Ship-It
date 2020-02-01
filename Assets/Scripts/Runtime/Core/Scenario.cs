@@ -30,6 +30,8 @@ public class Scenario
 		public string name;
 		public Config_Dev[] devs;
 		public Config_Task[] tasks;
+		public Config_Mood neutralMood;
+		public Config_Mood[] moods;
 	}
 
 	public struct Status
@@ -51,28 +53,32 @@ public class Scenario
 		public Dev.Status[] devs;
 	}
 
-	public Scenario(Config config)
+	public Scenario(Config config, Manager manager)
 	{
 		this.config = config;
+		this.manager = manager;
 	}
 
 	public void StartScenario()
 	{
-		activeDevs = new Dev[config.devs.Length];
-		for (int i = 0; i < config.devs.Length; ++i)
-			activeDevs[i] = new Dev(config.devs[i].config);
-
 		activeTasks = new List<Task>();
 		foreach (var item in config.tasks)
 			activeTasks.Add(new Task(item.config));
 
-		// TODO FIX!!!
-		SetSteveToIdle();
+		activeDevs = new Dev[config.devs.Length];
+		for (int i = 0; i < config.devs.Length; ++i)
+		{
+			activeDevs[i] = new Dev(config.devs[i].config, this, manager);
+			SetIdle(activeDevs[i]);
+		}
 	}
 
-	public void SetToTask(Dev Dev, Task target)
+	public void SetIdle(Dev dev)
+		=> SetToTask(dev, activeTasks.FirstOrDefault(t => t.GetTaskType() == TaskType.Idle));
+
+	public void SetToTask(Dev dev, Task target)
 	{
-		if(Dev == null)
+		if(dev == null)
 		{
 			Debug.LogError("Programmer not found!");
 			return;
@@ -84,14 +90,14 @@ public class Scenario
 			return;
 		}
 
-		Dev.currentTask = target;
+		dev.TrySetTask(target);
 	}
 
 	public void Tick(bool isNewDay)
 	{
 		foreach (var item in activeDevs)
 		{
-			item.EndTick(this);
+			item.EndTick();
 			item.StartTick(isNewDay);
 		}
 
@@ -101,11 +107,14 @@ public class Scenario
 	public Status GetStatus()
 		=> new Status(config.name, activeTasks, activeDevs);
 
-	[SerializeField]
-	private Config config;
 
+	public Mood GetNeutralMood()
+		=> new Mood(config.neutralMood.config);
+
+
+	private Manager manager;
+	private Config config;
 	private Dev[] activeDevs;
-	//TODO change
 	private List<Task> activeTasks;
 
 }

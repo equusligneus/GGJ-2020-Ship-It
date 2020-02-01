@@ -12,7 +12,8 @@ public class Manager : MonoBehaviour
 			enabled = false;
 			return;
 		}
-		scenario = new Scenario(scenarioConfig.config);
+
+		scenario = new Scenario(scenarioConfig.config, this);
 		scenario.StartScenario();
 		taskList.Tick(scenario.GetStatus());
     }
@@ -37,6 +38,9 @@ public class Manager : MonoBehaviour
 	public Scenario GetScenario()
 		=> scenario;
 
+	public Office GetOffice()
+		=> office;
+
 	//Game
 	public float tickTime;
 	public int ticksPerDay;	
@@ -47,7 +51,12 @@ public class Manager : MonoBehaviour
 
 
 	//UI
-	public Config_Scenario scenarioConfig;
-	public TaskList taskList;
+	[SerializeField]
+	private Config_Scenario scenarioConfig;
+	[SerializeField]	
+	private TaskList taskList;
+
+	[SerializeField]
+	private Office office; 
 
 }
