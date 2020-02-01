@@ -1,25 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 [System.Serializable]
-public class Programmer
+public class Dev
 {
-#if UNITY_EDITOR
-	public static Programmer CreateSteve()
-	{
-		Programmer steve = new Programmer();
-		steve.config.name = "Steve";
-		steve.config.maxSkill = 15;
-		steve.config.maxSpeed = 1;
-		steve.config.maxAnnoyance = 250;
-		return steve;
-	}
-
-#endif
-
-
 	[System.Serializable]
 	public struct Config
 	{
@@ -27,6 +11,7 @@ public class Programmer
 		public float maxSkill;
 		public float maxSpeed;
 		public float maxAnnoyance;
+		public Avatar avatar;
 	}
 
 	public struct Status
@@ -45,15 +30,11 @@ public class Programmer
 		public TaskType currentTaskType;
 	}
 
-	public Programmer() { }
-
-	private Programmer(Programmer programmer)
+	public Dev(Config config)
 	{
-		config = programmer.config;
+		this.config = config;
+		avatar = Object.Instantiate(config.avatar, Vector3.zero, Quaternion.identity);
 	}
-
-	public Programmer Clone()
-		=> new Programmer(this);
 
 	public void StartTick(bool isNewDay)
 	{
@@ -76,6 +57,8 @@ public class Programmer
 
 	[SerializeField]
 	private Config config;
+
+	private Avatar avatar;
 
 	public Task currentTask;
 }

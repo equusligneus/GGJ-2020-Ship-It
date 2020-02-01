@@ -7,7 +7,12 @@ public class Manager : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
     {
-		scenario = Scenario.CreateScenario();
+		if(!scenarioConfig)
+		{
+			enabled = false;
+			return;
+		}
+		scenario = new Scenario(scenarioConfig.config);
 		scenario.StartScenario();
 		taskList.Tick(scenario.GetStatus());
     }
@@ -38,10 +43,11 @@ public class Manager : MonoBehaviour
 	private float currentTime;
 	private int currentTick;
 
-
 	private Scenario scenario;
 
+
 	//UI
+	public Config_Scenario scenarioConfig;
 	public TaskList taskList;
 
 }

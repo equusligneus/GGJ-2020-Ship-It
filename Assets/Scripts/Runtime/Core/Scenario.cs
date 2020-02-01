@@ -11,76 +11,68 @@ using UnityEngine;
 public class Scenario
 {
 #if UNITY_EDITOR
-
-	public static Scenario CreateScenario()
-	{
-		Scenario scenario = new Scenario();
-		scenario.config.name = "Work work";
-		scenario.config.programmers = new Programmer[1] { Programmer.CreateSteve() };
-		scenario.config.tasks = new Task[4] { Task.CreateUIFeature(), Task.CreateUIBug(), Task.CreateRelax(), Task.CreateIdle() };
-
-		return scenario;
-	}
-
 	public void SetSteveToFeature()
-		=> SetToTask(activeProgrammers[0], activeTasks.FirstOrDefault(t => t.GetTaskType() == TaskType.Feature));
+		=> SetToTask(activeDevs[0], activeTasks.FirstOrDefault(t => t.GetTaskType() == TaskType.Feature));
 
 	public void SetSteveToFixing()
-		=> SetToTask(activeProgrammers[0], activeTasks.FirstOrDefault(t => t.GetTaskType() == TaskType.Bug));
+		=> SetToTask(activeDevs[0], activeTasks.FirstOrDefault(t => t.GetTaskType() == TaskType.Bug));
 
 	public void SetSteveToRelax()
-		=> SetToTask(activeProgrammers[0], activeTasks.FirstOrDefault(t => t.GetTaskType() == TaskType.Relaxing));
+		=> SetToTask(activeDevs[0], activeTasks.FirstOrDefault(t => t.GetTaskType() == TaskType.Relaxing));
 
 	public void SetSteveToIdle()
-		=> SetToTask(activeProgrammers[0], activeTasks.FirstOrDefault(t => t.GetTaskType() == TaskType.Idle));
+		=> SetToTask(activeDevs[0], activeTasks.FirstOrDefault(t => t.GetTaskType() == TaskType.Idle));
 #endif
 
 	[System.Serializable]
 	public struct Config
 	{
 		public string name;
-		[SerializeReference]
-		public Programmer[] programmers;
-		[SerializeReference]	
-		public Task[] tasks;
+		public Config_Dev[] devs;
+		public Config_Task[] tasks;
 	}
 
 	public struct Status
 	{
-		public Status(string name, List<Task> tasks, Programmer[] programmers)
+		public Status(string name, List<Task> tasks, Dev[] devs)
 		{
 			this.name = name;
 			this.tasks = new Task.Status[tasks.Count];
 			for (int i = 0; i < this.tasks.Length; ++i)
-				this.tasks[i] = tasks[i].GetStatus(programmers);
+				this.tasks[i] = tasks[i].GetStatus(devs);
 
-			this.programmers = new Programmer.Status[programmers.Length];
-			for (int i = 0; i < this.programmers.Length; ++i)
-				this.programmers[i] = programmers[i].GetStatus();
+			this.devs = new Dev.Status[devs.Length];
+			for (int i = 0; i < this.devs.Length; ++i)
+				this.devs[i] = devs[i].GetStatus();
 		}
 
 		public string name;
 		public Task.Status[] tasks;
-		public Programmer.Status[] programmers;
+		public Dev.Status[] devs;
+	}
+
+	public Scenario(Config config)
+	{
+		this.config = config;
 	}
 
 	public void StartScenario()
 	{
-		activeProgrammers = new Programmer[config.programmers.Length];
-		for (int i = 0; i < config.programmers.Length; ++i)
-			activeProgrammers[i] = config.programmers[i].Clone();
+		activeDevs = new Dev[config.devs.Length];
+		for (int i = 0; i < config.devs.Length; ++i)
+			activeDevs[i] = new Dev(config.devs[i].config);
 
 		activeTasks = new List<Task>();
 		foreach (var item in config.tasks)
-			activeTasks.Add(item.Clone());
+			activeTasks.Add(new Task(item.config));
 
 		// TODO FIX!!!
 		SetSteveToIdle();
 	}
 
-	public void SetToTask(Programmer programmer, Task target)
+	public void SetToTask(Dev Dev, Task target)
 	{
-		if(programmer == null)
+		if(Dev == null)
 		{
 			Debug.LogError("Programmer not found!");
 			return;
@@ -92,12 +84,12 @@ public class Scenario
 			return;
 		}
 
-		programmer.currentTask = target;
+		Dev.currentTask = target;
 	}
 
 	public void Tick(bool isNewDay)
 	{
-		foreach (var item in activeProgrammers)
+		foreach (var item in activeDevs)
 		{
 			item.EndTick(this);
 			item.StartTick(isNewDay);
@@ -107,12 +99,12 @@ public class Scenario
 	}
 
 	public Status GetStatus()
-		=> new Status(config.name, activeTasks, activeProgrammers);
+		=> new Status(config.name, activeTasks, activeDevs);
 
 	[SerializeField]
 	private Config config;
 
-	private Programmer[] activeProgrammers;
+	private Dev[] activeDevs;
 	//TODO change
 	private List<Task> activeTasks;
 
