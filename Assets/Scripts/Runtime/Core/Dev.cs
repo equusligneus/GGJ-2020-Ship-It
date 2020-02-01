@@ -22,15 +22,17 @@ public class Dev
 		public Status(Config config, Task task)
 		{
 			name = config.name;
-			annoyance = 0;
-			attention = 0;
-			currentTaskType = task.GetTaskType();
+			motivation = 1;
+			focus = 1;
+			this.task = task;
+			mood = null;
 		}
 
 		public string name;
-		public float annoyance;
-		public float attention;
-		public TaskType currentTaskType;
+		public float motivation;
+		public float focus;
+		public Task task;
+		public Mood mood;
 	}
 
 	public Dev(Config config, Scenario scenario, Manager manager)
@@ -52,37 +54,38 @@ public class Dev
 		if (avatar.isMoving)
 			return;
 
-		currentTask.AddProgress(config.speed);
+		WorkLog.Commit(config, ref status);
+		//currentTask.AddProgress(config.speed);
 		
-		if (currentTask.IsDone)
-			scenario.SetIdle(this);
+		//if (currentTask.IsDone)
+		//	scenario.SetIdle(this);
 
-		if (currentMood == null)
-			currentMood = scenario.GetNeutralMood();
+		//if (currentMood == null)
+		//	currentMood = scenario.GetNeutralMood();
 
-		Mood newMood = currentMood.Tick(status.annoyance);
-		if (newMood != currentMood)
-		{
-			currentMood = newMood;
-			avatar.PostMood(currentMood);
-		}
+		//Mood newMood = currentMood.Tick(status.motivation);
+		//if (newMood != currentMood)
+		//{
+		//	currentMood = newMood;
+		//	avatar.PostMood(currentMood);
+		//}
 	}
 
 	public void TrySetTask(Task task)
 	{
-		if (currentTask == null)
+		if (status.task == null)
 		{
 			avatar.TryMoveTo(task.GetTaskType());
-			currentTask = task;
+			status.task = task;
 			return;
 		}
 
-		if (currentTask == task)
+		if (status.task == task)
 			return;
 
 		// works on same workstation type or has open workstations
-		if (currentTask.GetTaskType() == task.GetTaskType() || avatar.TryMoveTo(task.GetTaskType()))
-			currentTask = task;
+		if (status.task.GetTaskType() == task.GetTaskType() || avatar.TryMoveTo(task.GetTaskType()))
+			status.task = task;
 		else
 			scenario.SetIdle(this); // TODO This might cause a StackOverflow!!! Fix reservations for idle!
 	}
@@ -100,6 +103,5 @@ public class Dev
 	private Avatar avatar;
 	private Status status;
 
-	public Task currentTask;
 	public Mood currentMood;
 }
