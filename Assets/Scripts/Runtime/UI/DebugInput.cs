@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DebugInput : MonoBehaviour
 {
@@ -23,12 +21,6 @@ public class DebugInput : MonoBehaviour
 		GUILayout.EndHorizontal();
 		GUILayout.EndArea();
 	}
-
-	private void SetToWork() { }
-
-	private void SetToFixing() { }
-
-	private void SetToRelax() { }
 
 	public Rect area;
 	public Manager manager;
