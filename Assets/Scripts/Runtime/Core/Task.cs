@@ -22,7 +22,7 @@ public class Task
 		public int importance;
 		public float difficulty;
 		public float work;
-		public float annoyance;
+		public float enjoyability;
 		public int maxProgrammerNum;
 	}
 
@@ -51,6 +51,9 @@ public class Task
 
 	public TaskType GetTaskType()
 		=> config.type;
+
+	public Config GetConfig()
+		=> config;
 
 	[SerializeField]
 	private Config config;
@@ -89,7 +92,7 @@ public class Task
 		{
 			foreach(var item in Devs)
 			{
-				if (item.currentTask == this)
+				if (item.GetStatus().task == this)
 					involvedDevs.Add(item.GetStatus());
 			}
 		}
