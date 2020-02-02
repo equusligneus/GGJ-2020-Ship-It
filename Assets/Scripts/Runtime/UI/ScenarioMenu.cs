@@ -2,14 +2,7 @@
 
 public class ScenarioMenu : MenuPage
 {
-	protected override void Awake()
-	{
-		base.Awake();
-		Construct();
-		base.Close();
-	}
-
-	private void Construct()
+	protected override void Construct()
 	{
 		foreach(var item in scenarios)
 			Instantiate(prefab, buttonRoot, false).Setup(ui.manager, item);

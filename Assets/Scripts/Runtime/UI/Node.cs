@@ -29,7 +29,12 @@ public class Node : MonoBehaviour
 	private void Start()
 	{
 		for (int i = 0; i < children.Length; ++i)
-			children[i].parent = this;
+		{
+			if (children[i])
+				children[i].parent = this;
+			else
+				Debug.LogErrorFormat(this, "Child node {0} not assigned", i);
+		}
 	}
 
 	public void GetPathToRoot(ref Queue<Node> nodes)

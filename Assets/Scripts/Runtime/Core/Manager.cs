@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Scheduler))]
 public class Manager : MonoBehaviour
 {
-	private void Awake()
-		=> scheduler = GetComponent<Scheduler>();
+	private void Start()
+	{
+		scheduler = GetComponent<Scheduler>();
+		ui.Setup(this);
+	}
 
 	public void SelectScenario(Config_Scenario scenario)
 	{
@@ -31,6 +32,9 @@ public class Manager : MonoBehaviour
 
 	[SerializeField]	
 	private TaskList taskList;
+
+	[SerializeField]
+	private UI ui;
 
 	[SerializeField]
 	private Office office;
@@ -63,5 +67,14 @@ public class Manager : MonoBehaviour
 	public void TickUI()
 	{
 		throw new NotImplementedException();
+	}
+
+	public void CloseApplication()
+	{
+#if UNITY_EDITOR
+		UnityEditor.EditorApplication.isPlaying = false;
+#else
+		Application.Quit();
+#endif
 	}
 }

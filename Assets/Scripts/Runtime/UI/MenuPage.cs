@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Canvas))]
 public abstract class MenuPage : MonoBehaviour
@@ -43,7 +44,11 @@ public abstract class MenuPage : MonoBehaviour
 	}
 
 	public void Setup(UI ui)
-		=> this.ui = ui;
+	{
+		this.ui = ui;
+		endGameButton.onClick.AddListener(ui.manager.CloseApplication);
+		Construct();
+	}
 
     public virtual void Open()
 		=> gameObject.SetActive(true);
@@ -51,10 +56,15 @@ public abstract class MenuPage : MonoBehaviour
 	public virtual void Close()
 		=> gameObject.SetActive(false);
 
+	protected virtual void Construct() { }
+
 	public abstract Type type { get; }
 
 	protected static Dictionary<Type, MenuPage> s_typeToMenu;
 	public static Type s_currentMenu;
+
+	[SerializeField]
+	protected Button endGameButton;
 
 	protected Canvas canvas;
 	protected UI ui;
