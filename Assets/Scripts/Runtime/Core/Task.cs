@@ -11,7 +11,6 @@ public enum TaskType
 	Relaxing,
 }
 
-[System.Serializable]
 public class Task
 {
 	[System.Serializable]
@@ -19,6 +18,7 @@ public class Task
 	{
 		public string name;
 		public TaskType type;
+		public Node.Type location;
 		public int importance;
 		public float difficulty;
 		public float work;

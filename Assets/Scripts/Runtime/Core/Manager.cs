@@ -15,10 +15,6 @@ public class Manager : MonoBehaviour
 		scheduler.StartScenario(this);
 	}
 
-	public void OnScenarioEnd()
-	{
-		throw new NotImplementedException();
-	}
 
 	public Office GetOffice()
 		=> office;
@@ -38,4 +34,34 @@ public class Manager : MonoBehaviour
 
 	[SerializeField]
 	private Office office;
+
+	public void OnScenarioEnd()
+	{
+		
+	}
+
+	public void ShowStandup(Action onDone)
+	{
+		throw new NotImplementedException();
+	}
+
+	public void ShowLunchBreak(Action onDone)
+	{
+		throw new NotImplementedException();
+	}
+
+	public void ShowNight(Action onDone)
+	{
+		throw new NotImplementedException();
+	}
+
+	public void ShowEnd(Action onDone)
+	{
+		throw new NotImplementedException();
+	}
+
+	public void TickUI()
+	{
+		throw new NotImplementedException();
+	}
 }

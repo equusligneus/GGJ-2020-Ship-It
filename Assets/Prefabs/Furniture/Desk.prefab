@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6e58eac2c89fde4f94ba187650d3b9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  type: 3
   isMultiUser: 0
   children: []
 --- !u!1001 &8138610265745144881

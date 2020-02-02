@@ -26,11 +26,23 @@ public class Avatar : MonoBehaviour
 			body.color = config.avatarColor;
 
 		name = config.name;
-		node = office.GetStartNode();
+		node = office.GetPortalNode();
 		// TODO have them move in?
 		transform.position = node.transform.position;
 	}
 
+	public void Enter()
+	{
+		office.SetToPortal(transform);
+		head.enabled = true;
+		body.enabled = true;
+		office.PlotPathToNodeType(Node.Type.WorkStation, node, ref path, isMoving);
+	}
+
+	public void Exit()
+	{
+		office.PlotPathToNodeType(Node.Type.Portal, node, ref path, isMoving);
+	}
 
 	public void SetMood(Dev dev)
 	{
@@ -43,10 +55,9 @@ public class Avatar : MonoBehaviour
 		//speechBubble.PostMood(mood);
 	}
 
-	public bool TryMoveTo(TaskType type)
+	public bool TryMoveTo(Node.Type type)
 	{
-		// if path !empty, remove old path and remove reservation!
-		if(office.GetPathToFreeNodeOfType(type, node, ref path, isMoving))
+		if(office.PlotPathToNodeType(type, node, ref path, isMoving))
 		{
 			// remove 
 			node.Vacate();
@@ -66,6 +77,9 @@ public class Avatar : MonoBehaviour
 
 	[SerializeField]
 	private SpriteRenderer body;
+
+	[SerializeField]
+	private SpriteRenderer head;
 
 	[SerializeField]
 	private Animator headAnimator;

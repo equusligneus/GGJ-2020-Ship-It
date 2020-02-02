@@ -8,9 +8,19 @@ public class Office : MonoBehaviour
 	[SerializeField]
 	private Node root = null;
 	[SerializeField]
-	private Node start = null;
+	private Node portal = null;
 
-	public bool GetPathToFreeNodeOfType(TaskType type, Node currentNode, ref Queue<Node> path, bool isMoving)
+	private void Awake()
+	{
+		if(!portal)
+		{
+			List<Node> portals = new List<Node>();
+			root.GetFreeNodesOfType(Node.Type.Portal, ref portals);
+			portal = portals[0];
+		}
+	}
+
+	public bool PlotPathToNodeType(Node.Type type, Node currentNode, ref Queue<Node> path, bool isMoving)
 	{
 		bool removeFirstElement = !isMoving;
 		if(isMoving)
@@ -54,13 +64,16 @@ public class Office : MonoBehaviour
 		return true;
 	}
 
+	public void SetToPortal(Transform transform)
+		=> transform.position = portal.transform.position;
+
 	public Node GetRootNode()
 		=> root;
 
-	public Node GetStartNode()
-		=> start;
+	public Node GetPortalNode()
+		=> portal;
 
-	public Node GetNearestFreeNodeOfType(TaskType type, Vector3 position)
+	public Node GetNearestFreeNodeOfType(Node.Type type, Vector3 position)
 	{
 		List<Node> nodes = new List<Node>();
 		root.GetFreeNodesOfType(type, ref nodes);

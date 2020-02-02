@@ -40,7 +40,7 @@ public class Dev
 		this.config = config;
 		this.scenario = scenario;
 		this.manager = manager;
-		avatar = Object.Instantiate(config.avatar, Vector3.zero, Quaternion.identity,DevParent);
+		avatar = Object.Instantiate(config.avatar, Vector3.zero, Quaternion.identity);
 		avatar.Setup(this, manager.GetOffice());
 	}
 
@@ -49,11 +49,10 @@ public class Dev
 		if (avatar.isMoving)
 			return;
 
+		if (status.task == null)
+			return;
+
 		WorkLog.Commit(config, ref status);
-		//currentTask.AddProgress(config.speed);
-		
-		//if (currentTask.IsDone)
-		//	scenario.SetIdle(this);
 
 		//if (currentMood == null)
 		//	currentMood = scenario.GetNeutralMood();
@@ -66,23 +65,34 @@ public class Dev
 		//}
 	}
 
-	public void TrySetTask(Task task)
+	public void Enter()
+		=> avatar.TryMoveTo(Node.Type.WorkStation);
+
+	public void Exit()
+		=> avatar.TryMoveTo(Node.Type.Portal);
+
+	public bool TrySetTask(Task task)
 	{
 		if (status.task == null)
 		{
-			avatar.TryMoveTo(task.GetTaskType());
-			status.task = task;
-			return;
+			if(avatar.TryMoveTo(task.GetConfig().location))
+			{
+				status.task = task;
+				return true;
+			}
 		}
 
 		if (status.task == task)
-			return;
+			return false;
 
 		// works on same workstation type or has open workstations
-		if (status.task.GetTaskType() == task.GetTaskType() || avatar.TryMoveTo(task.GetTaskType()))
+		if (status.task.GetConfig().location == task.GetConfig().location || avatar.TryMoveTo(task.GetConfig().location))
+		{
 			status.task = task;
-		else
-			scenario.SetIdle(this); // TODO This might cause a StackOverflow!!! Fix reservations for idle!
+			return true;
+		}
+
+		return false;
 	}
 
 	public Status GetStatus()
@@ -91,12 +101,13 @@ public class Dev
 	public Config GetConfig()
 		=> config;
 
+	public Avatar avatar { get; private set; }
+
 	private Config config;
 	private Scenario scenario;
 	private Manager manager;
 
-	private Avatar avatar;
-	private Status status;
+	public Status status;
 
 	public Mood currentMood;
 	public Transform DevParent;

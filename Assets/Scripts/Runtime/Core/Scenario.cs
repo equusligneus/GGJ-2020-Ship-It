@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 
 #if UNITY_EDITOR
-	using System.Linq; 
+using System.Linq;
 #endif
 
 public class Scenario
@@ -72,6 +73,24 @@ public class Scenario
 		}
 	}
 
+	public void EnterDevs()
+	{
+		foreach (var item in activeDevs)
+			item.Enter();
+	}
+
+	public void ExitDevs()
+	{
+		foreach (var item in activeDevs)
+			item.Exit();
+	}
+
+
+	//internal void EndDay()
+	//{
+	//	throw new NotImplementedException();
+	//}
+
 	public void SetIdle(Dev dev)
 		=> SetToTask(dev, activeTasks.FirstOrDefault(t => t.GetTaskType() == TaskType.Idle));
 
@@ -112,5 +131,17 @@ public class Scenario
 	private Config config;
 	private Dev[] activeDevs;
 	private List<Task> activeTasks;
-
+	internal int daysLeft;
+	public bool areDevsMoving 
+	{ 
+		get 
+		{
+			foreach(var item in activeDevs)
+			{
+				if (item.avatar.isMoving)
+					return true;
+			}
+			return false;
+		}
+	}
 }

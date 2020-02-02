@@ -6,9 +6,10 @@ using UnityEngine;
 [RequireComponent(typeof(Manager))]
 public class Scheduler : MonoBehaviour
 {
-	public enum ScenarioPhase
+	public enum Phase
 	{
 		StartOfDay,
+		StandUp,
 		Morning,
 		StartOfLunchBreak,
 		LunchBreak,
@@ -22,38 +23,47 @@ public class Scheduler : MonoBehaviour
 	public interface IRoutine
 	{
 		bool isActive { get; }
-		ScenarioPhase phase { get; }
+		Phase phase { get; }
 
 		Scheduler scheduler { set; }
 
-		void Enter(ScenarioPhase phase);
+		void Enter(Phase phase);
 		void Update();
 		void Exit();
 	}
 
 	[System.Serializable]
-	public class EnterDevRoutine : IRoutine
+	public class MoveDevRoutine : IRoutine
 	{
-		public bool isActive
-			=> true;
+		public bool isActive { get; private set; }
 
-		public ScenarioPhase phase { get; private set; }
+		public Phase phase { get; private set; }
 
 		public Scheduler scheduler { get; set; }
 
-		public void Enter(ScenarioPhase phase)
+		public void Enter(Phase phase)
 		{
 			this.phase = phase;
+			isActive = true;
+			switch (phase)
+			{
+				case Phase.StartOfDay:
+				case Phase.EndOfLunchBreak:
+					scheduler.manager.scenario.EnterDevs();
+					break;
+				case Phase.StartOfLunchBreak:
+				case Phase.EndOfDay:
+					scheduler.manager.scenario.ExitDevs();
+					break;
+				default:
+					break;
+			}
 		}
 
-		public void Update()
-		{
-		}
+		public void Update() 
+			=> isActive = scheduler.manager.scenario.areDevsMoving;
 
-		public void Exit()
-		{
-			
-		}
+		public void Exit() { }
 	}
 
 	[System.Serializable]
@@ -70,9 +80,9 @@ public class Scheduler : MonoBehaviour
 		public bool isActive
 			=> currentTick < ticksPerPhase;
 
-		public ScenarioPhase phase { get; private set; }
+		public Phase phase { get; private set; }
 
-		public void Enter(ScenarioPhase phase) 
+		public void Enter(Phase phase) 
 		{
 			this.phase = phase;
 			currentTime = 0;
@@ -88,7 +98,7 @@ public class Scheduler : MonoBehaviour
 				++currentTick;
 
 				scheduler.manager.scenario.Tick();
-				scheduler.manager.GetTaskList().Tick(scheduler.manager.scenario.GetStatus());
+				scheduler.manager.TickUI();
 			}
 		}
 
@@ -97,27 +107,43 @@ public class Scheduler : MonoBehaviour
 	}
 
 	[System.Serializable]
-	public class ExitDevRoutine : IRoutine
+	public class WaitRoutine : IRoutine
 	{
-		public bool isActive 
-			=> true;
+		public bool isActive { get; private set; }
 
-		public ScenarioPhase phase { get; private set; }
+		public Phase phase { get; private set; }
 
 		public Scheduler scheduler { get; set; }
 
-		public void Enter(ScenarioPhase phase)
+		public void Enter(Phase phase)
 		{
 			this.phase = phase;
+			isActive = true;
+			switch (this.phase)
+			{
+				case Phase.StandUp:
+					scheduler.manager.ShowStandup(OnDone);
+					break;
+				case Phase.LunchBreak:
+					scheduler.manager.ShowLunchBreak(OnDone);
+					break;
+				case Phase.Night:
+					scheduler.manager.ShowNight(OnDone);
+					break;
+				case Phase.EndOfScenario:
+					scheduler.manager.ShowEnd(OnDone);
+					break;
+				default:
+					break;
+			}
 		}
 
-		public void Update()
-		{
-		}
+		public void Update() { }
 
-		public void Exit()
-		{
-		}
+		public void Exit() { }
+
+		private void OnDone()
+			=> isActive = false;
 	}
 
 	public bool StartScenario(Manager manager)
@@ -131,53 +157,20 @@ public class Scheduler : MonoBehaviour
 		this.manager = manager;
 
 		manager.scenario.StartScenario();
-		currentRoutine = enterRoutine;
-		currentRoutine.Enter(ScenarioPhase.StartOfDay);
+		currentRoutine = moveRoutine;
+		currentRoutine.Enter(Phase.StartOfDay);
+		isPaused = true;
 		return true;
 	}
 
 
     void Awake()
     {
-		enterRoutine.scheduler = this;
+		isPaused = true;
+		moveRoutine.scheduler = this;
 		tickRoutine.scheduler = this;
-		exitRoutine.scheduler = this;
-        //if (!Manager.Scenario)
-        //{
-        //    debug.Log("Scenario not initialized");
-        //    return;
-        //}
-        //scenario = GetComponent<Scenario>();
-        //// This will not work if there is no devparent
-        //DevParent = GetComponent<DevParent>();
-        //taskList.Tick(scenario.GetStatus());
+		waitRoutine.scheduler = this;
     }
-
- //   public void StartDay()
-	//{
- //       scenario.StartScenario();
- //       foreach (GameObject child in DevParent)
- //       {
- //           if (child.GetComponent<Avatar>().isMoving){
- //               child.GetComponent<Avatar>().TrySetTask();
- //               child.GetComponent<Avatar>().SetMood();
- //           } else {
- //               child.StartTick(true);
- //           }
- //       }
- //   }
-
- //   public void EndDay()
-	//{
- //       if (Manager.currentTick == 0)
- //       {
- //           foreach (GameObject child in DevParent)
- //           {
- //               child.EndTick();
- //           }
- //       }
-	//}
-
 
 	private void Update()
     {
@@ -185,63 +178,71 @@ public class Scheduler : MonoBehaviour
 			return;
 
 		currentRoutine.Update();
-		if(!currentRoutine.isActive)
-		{
-			currentRoutine.Exit();
-			switch (currentRoutine.phase)
-			{
-				case ScenarioPhase.StartOfDay:
-					currentRoutine = tickRoutine;
-					currentRoutine.Enter(ScenarioPhase.Morning);
-					break;
-				case ScenarioPhase.Morning:
-					currentRoutine = exitRoutine;
-					currentRoutine.Enter(ScenarioPhase.StartOfLunchBreak);
-					break;
-				case ScenarioPhase.StartOfLunchBreak:
-					// wait phase
-					break;
-				case ScenarioPhase.LunchBreak:
-					currentRoutine = enterRoutine;
-					currentRoutine.Enter(ScenarioPhase.EndOfLunchBreak);
-					break;
-				case ScenarioPhase.EndOfLunchBreak:
-					currentRoutine = tickRoutine;
-					currentRoutine.Enter(ScenarioPhase.Afternoon);
-					break;
-				case ScenarioPhase.Afternoon:
-					currentRoutine = exitRoutine;
-					currentRoutine.Enter(ScenarioPhase.EndOfDay);
-					break;
-				case ScenarioPhase.EndOfDay:
-					// wait phase
-					break;
-				case ScenarioPhase.Night:
-					// if not finished!!!				
-					currentRoutine = enterRoutine;
-					currentRoutine.Enter(ScenarioPhase.StartOfDay);
-					break;
-				case ScenarioPhase.EndOfScenario:
-					// end everything!!!
-					isPaused = true;
-					manager.OnScenarioEnd();
-					break;
-				default:
-					break;
-			}
-		}
-    }
+		if (!currentRoutine.isActive)
+			SwitchRoutine();
+	}
 
+	private void SwitchRoutine()
+	{
+		currentRoutine.Exit();
+		switch (currentRoutine.phase)
+		{
+			case Phase.StartOfDay:
+			currentRoutine = waitRoutine;
+			currentRoutine.Enter(Phase.StandUp);
+			break;
+		case Phase.StandUp:
+				currentRoutine = tickRoutine;
+				currentRoutine.Enter(Phase.Morning);
+				break;
+			case Phase.Morning:
+				currentRoutine = moveRoutine;
+				currentRoutine.Enter(Phase.StartOfLunchBreak);
+				break;
+			case Phase.StartOfLunchBreak:
+				currentRoutine = waitRoutine;
+				currentRoutine.Enter(Phase.LunchBreak);
+				break;
+			case Phase.LunchBreak:
+				currentRoutine = moveRoutine;
+				currentRoutine.Enter(Phase.EndOfLunchBreak);
+				break;
+			case Phase.EndOfLunchBreak:
+				currentRoutine = tickRoutine;
+				currentRoutine.Enter(Phase.Afternoon);
+				break;
+			case Phase.Afternoon:
+				currentRoutine = moveRoutine;
+				currentRoutine.Enter(Phase.EndOfDay);
+				break;
+			case Phase.EndOfDay:
+				//manager.scenario.EndDay();
+				currentRoutine = waitRoutine;
+				currentRoutine.Enter(manager.scenario.daysLeft > 0 ? Phase.Night : Phase.EndOfScenario);
+				break;
+			case Phase.Night:
+				currentRoutine = moveRoutine;
+				currentRoutine.Enter(Phase.StartOfDay);
+				break;
+			case Phase.EndOfScenario:
+				// end everything!!!
+				isPaused = true;
+				manager.OnScenarioEnd();
+				break;
+			default:
+				break;
+		}
+	}
 
     public Manager manager { get; private set; }
 	private bool isPaused;
 
 	private IRoutine currentRoutine;
 	[SerializeField]
-	private EnterDevRoutine enterRoutine;
+	private MoveDevRoutine moveRoutine;
 	[SerializeField]
 	private TickRoutine tickRoutine;
 	[SerializeField]
-	private ExitDevRoutine exitRoutine;
+	private WaitRoutine waitRoutine;
 
 }
