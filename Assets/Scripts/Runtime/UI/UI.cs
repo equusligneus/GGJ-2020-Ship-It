@@ -18,7 +18,4 @@ public class UI : MonoBehaviour
 	public Manager manager { get; private set; }
 
 	private MenuPage[] pages;
-
-	[SerializeField]
-	private TaskList taskList;
 }

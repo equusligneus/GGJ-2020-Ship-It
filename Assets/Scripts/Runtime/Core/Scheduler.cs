@@ -211,7 +211,7 @@ public class Scheduler : MonoBehaviour
 	private void SwitchRoutine()
 	{
 		currentRoutine.Exit();
-		Debug.LogErrorFormat("End of phase {0}", currentRoutine.phase);
+		Debug.LogFormat("End of phase {0}", currentRoutine.phase);
 		switch (currentRoutine.phase)
 		{
 			case Phase.StartOfDay:

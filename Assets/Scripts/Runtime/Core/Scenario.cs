@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
-
-#if UNITY_EDITOR
 using System.Linq;
-#endif
 
 public class Scenario
 {
