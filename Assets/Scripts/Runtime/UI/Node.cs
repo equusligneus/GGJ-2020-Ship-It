@@ -9,7 +9,7 @@ public class Node : MonoBehaviour
 		None,
 		Portal,
 		WorkStation,
-		Playstation,
+		PlayStation,
 		DartsBoard,
 		BillardTable,
 		BeanBag,
@@ -95,7 +95,7 @@ public class Node : MonoBehaviour
 			case Type.WorkStation:
 				Gizmos.color = Color.green;
 				break;
-			case Type.Playstation:
+			case Type.PlayStation:
 			case Type.DartsBoard:
 			case Type.BillardTable:
 				Gizmos.color = Color.yellow;
@@ -114,9 +114,11 @@ public class Node : MonoBehaviour
 			return;
 		
 		Gizmos.color = Color.blue;
-		for(int i = 0; i < children.Length; ++i)
-			Gizmos.DrawLine(transform.position, children[i].transform.position);
-
+		for (int i = 0; i < children.Length; ++i)
+		{
+			if (children[i])
+				Gizmos.DrawLine(transform.position, children[i].transform.position);
+		}
 		Gizmos.color = color;
 	}
 #endif
