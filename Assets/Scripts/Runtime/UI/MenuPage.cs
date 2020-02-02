@@ -46,10 +46,10 @@ public abstract class MenuPage : MonoBehaviour
 		=> this.ui = ui;
 
     public virtual void Open()
-		=> canvas.enabled = true;
+		=> gameObject.SetActive(true);
 
 	public virtual void Close()
-		=> canvas.enabled = false;
+		=> gameObject.SetActive(false);
 
 	public abstract Type type { get; }
 
