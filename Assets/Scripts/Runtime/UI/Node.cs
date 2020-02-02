@@ -69,6 +69,9 @@ public class Node : MonoBehaviour
 		return false;
 	}
 
+	public Type GetNodeType()
+		=> type;
+
 	public bool Reserve()
 	{
 		if (isReserved)

@@ -38,6 +38,7 @@ public class Dev
 	public Dev(Config config, Scenario scenario, Manager manager)
 	{
 		this.config = config;
+		status = new Status(config, null);
 		this.scenario = scenario;
 		this.manager = manager;
 		avatar = Object.Instantiate(config.avatar, Vector3.zero, Quaternion.identity);

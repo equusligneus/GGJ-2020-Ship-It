@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProgrammerConfig
   config:
     name: Dave
-    skill: 0
+    skill: 1
     challengeEnjoymentCurve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    speed: 0
+    speed: 1
     maxAnnoyance: 42
     avatar: {fileID: 2245724781042666178, guid: 1e2b824f2a389d248ae9cf119c5d495d,
       type: 3}

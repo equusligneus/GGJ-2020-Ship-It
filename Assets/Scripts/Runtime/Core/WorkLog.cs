@@ -17,6 +17,8 @@ public static class WorkLog
 		float progress = dev.speed * status.motivation * abilityFactor;
 		float safety = status.focus * abilityFactor;
 
+		Debug.LogFormat("Dev {0} added {1} to {2}", dev.name, progress, taskConfig.name);
+
 		status.task.AddProgress(progress);
 
 		// add mood modifiers here

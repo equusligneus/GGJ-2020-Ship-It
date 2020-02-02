@@ -17,7 +17,7 @@ MonoBehaviour:
     type: 3
     location: 3
     importance: 0
-    difficulty: 0
-    work: 1
+    difficulty: 2
+    work: 12000
     enjoyability: 0
     maxProgrammerNum: -1

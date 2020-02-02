@@ -61,6 +61,9 @@ public class Avatar : MonoBehaviour
 
 	public bool TryMoveTo(Node.Type type)
 	{
+		if (node && type == node.GetNodeType())
+			return true;
+
 		if(office.PlotPathToNodeType(type, node, ref path, isMoving))
 		{
 			// remove 
