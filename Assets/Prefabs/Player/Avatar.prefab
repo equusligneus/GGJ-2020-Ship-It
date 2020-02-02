@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 7248893259135504059}
   - component: {fileID: 957373199122679435}
   - component: {fileID: 2245724781042666178}
-  - component: {fileID: 1730968726823933508}
+  - component: {fileID: 9190346470748196376}
   m_Layer: 0
   m_Name: Avatar
   m_TagString: Untagged
@@ -202,7 +202,7 @@ MonoBehaviour:
   head: {fileID: 0}
   headAnimator: {fileID: 8195370673659625439}
   speechBubble: {fileID: 6175791362417179358}
---- !u!70 &1730968726823933508
+--- !u!70 &9190346470748196376
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -212,11 +212,11 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.00364542, y: 0.20778859}
-  m_Size: {x: 0.7785257, y: 1.2155771}
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.64, y: 0.8}
   m_Direction: 0
 --- !u!1 &2510336486065661124
 GameObject:
