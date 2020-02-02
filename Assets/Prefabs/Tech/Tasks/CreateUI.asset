@@ -15,7 +15,9 @@ MonoBehaviour:
   config:
     name: Create Awesome UI
     type: 1
-    work: 42
+    location: 2
+    importance: 0
     difficulty: 2
-    annoyance: 9000
+    work: 42
+    enjoyability: 0
     maxProgrammerNum: 1

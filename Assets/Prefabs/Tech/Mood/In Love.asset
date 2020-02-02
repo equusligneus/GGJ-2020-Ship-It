@@ -14,12 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   config:
     name: In Love
-    bubble: {fileID: 0}
-    content: {fileID: 0}
+    bubble: {fileID: 21300000, guid: 45c4992f1fa3d844ca30f1af658505f8, type: 3}
+    content: {fileID: 21300000, guid: 11f2eaf0402457b408ad1f259fc4374f, type: 3}
     skillMultiplier: 2
     annoyanceIncreaseMultiplier: 0
     annoyanceDecreaseMultiplier: 1
     attentionMultiplier: 0.5
+    speedMultiplier: 0
     MoodChangePropabilityCurve:
       serializedVersion: 2
       m_Curve:
@@ -44,3 +45,4 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    followUps: []

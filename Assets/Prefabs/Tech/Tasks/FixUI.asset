@@ -15,7 +15,9 @@ MonoBehaviour:
   config:
     name: FixUI
     type: 2
-    work: 12
+    location: 2
+    importance: 0
     difficulty: 1
-    annoyance: 90000
+    work: 12
+    enjoyability: 0
     maxProgrammerNum: -1

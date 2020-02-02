@@ -14,12 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   config:
     name: Neutral
-    bubble: {fileID: 0}
-    content: {fileID: 0}
+    bubble: {fileID: 21300000, guid: a365498eee0c0fe46ab8249233aa3d53, type: 3}
+    content: {fileID: 21300000, guid: 00a60f4af82a026438acb81e80668a74, type: 3}
     skillMultiplier: 1
     annoyanceIncreaseMultiplier: 1
     annoyanceDecreaseMultiplier: 1
     attentionMultiplier: 1
+    speedMultiplier: 0
     MoodChangePropabilityCurve:
       serializedVersion: 2
       m_Curve:
@@ -44,3 +45,4 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    followUps: []

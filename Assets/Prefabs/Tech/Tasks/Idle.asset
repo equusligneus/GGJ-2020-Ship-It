@@ -15,7 +15,9 @@ MonoBehaviour:
   config:
     name: Idle
     type: 0
-    work: 1
+    location: 2
+    importance: 0
     difficulty: 0
-    annoyance: 0
+    work: 1
+    enjoyability: 0
     maxProgrammerNum: -1

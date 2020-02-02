@@ -15,7 +15,9 @@ MonoBehaviour:
   config:
     name: Play Mario Kart
     type: 3
-    work: 1
+    location: 3
+    importance: 0
     difficulty: 0
-    annoyance: -25
+    work: 1
+    enjoyability: 0
     maxProgrammerNum: -1
