@@ -159,7 +159,7 @@ public class Scheduler : MonoBehaviour
 		manager.scenario.StartScenario();
 		currentRoutine = moveRoutine;
 		currentRoutine.Enter(Phase.StartOfDay);
-		isPaused = true;
+		isPaused = false;
 		return true;
 	}
 

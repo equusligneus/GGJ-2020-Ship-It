@@ -46,27 +46,27 @@ public class Manager : MonoBehaviour
 
 	public void ShowStandup(Action onDone)
 	{
-		throw new NotImplementedException();
+		MenuPage.SwitchMenu(MenuPage.Type.StandUp, onDone);
 	}
 
 	public void ShowLunchBreak(Action onDone)
 	{
-		throw new NotImplementedException();
+		MenuPage.SwitchMenu(MenuPage.Type.LunchBreak, onDone);
 	}
 
 	public void ShowNight(Action onDone)
 	{
-		throw new NotImplementedException();
+		MenuPage.SwitchMenu(MenuPage.Type.Night, onDone);
 	}
 
 	public void ShowEnd(Action onDone)
 	{
-		throw new NotImplementedException();
+		MenuPage.SwitchMenu(MenuPage.Type.Summary, onDone);
 	}
 
 	public void TickUI()
 	{
-		throw new NotImplementedException();
+		ui.Tick(scenario.GetStatus());
 	}
 
 	public void CloseApplication()

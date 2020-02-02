@@ -4,13 +4,6 @@ using UnityEngine;
 
 public class UI : MonoBehaviour
 {
-	[SerializeField]
-	private MenuPage[] pages;
-
-	[SerializeField]
-	private TaskList taskList;
-	
-	
 	public void Setup(Manager manager)
 	{
 		this.manager = manager;
@@ -18,5 +11,14 @@ public class UI : MonoBehaviour
 			item.Setup(this);
 	}
 
+	public void Tick(Scenario.Status scenarioStatus)
+	{ }
+
 	public Manager manager { get; private set; }
+
+	[SerializeField]
+	private MenuPage[] pages;
+
+	[SerializeField]
+	private TaskList taskList;
 }

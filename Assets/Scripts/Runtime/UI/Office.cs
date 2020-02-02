@@ -43,7 +43,7 @@ public class Office : MonoBehaviour
 		// makes most sense to measure from the midpoint or there will be weird moves
 		Node endPoint = GetNearestFreeNodeOfType(type, root.transform.position);
 
-		Debug.LogErrorFormat("Endpoint is {0}", (endPoint ? "available" : "null"));
+		Debug.LogFormat("Endpoint is {0}", (endPoint ? endPoint.name : "null"));
 
 		if (!endPoint)
 			return false;
@@ -59,7 +59,7 @@ public class Office : MonoBehaviour
 		while (fromRoot.Count > 0)
 			path.Enqueue(fromRoot.Pop());
 
-		Debug.LogErrorFormat("Has {0} nodes!", path.Count);
+		Debug.LogFormat("Path has {0} nodes!", path.Count);
 
 		return true;
 	}

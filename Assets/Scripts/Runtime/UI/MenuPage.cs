@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,10 +20,10 @@ public abstract class MenuPage : MonoBehaviour
 	static MenuPage()
 	{
 		s_typeToMenu = new Dictionary<Type, MenuPage>();
-		s_currentMenu = Type.None;
+		s_currentMenu = Type.ScenarioSelect;
 	}
 
-	public static void SwitchMenu(Type type)
+	public static void SwitchMenu(Type type, Action action = null)
 	{
 		if (type == s_currentMenu)
 			return;
@@ -33,7 +34,7 @@ public abstract class MenuPage : MonoBehaviour
 		s_currentMenu = type;
 
 		if (s_typeToMenu.ContainsKey(s_currentMenu))
-			s_typeToMenu[s_currentMenu].Open();
+			s_typeToMenu[s_currentMenu].Open(action);
 
 	}
 
@@ -41,6 +42,8 @@ public abstract class MenuPage : MonoBehaviour
 	{
 		canvas = GetComponent<Canvas>();
 		s_typeToMenu.Add(type, this);
+		if (type != s_currentMenu)
+			Close();
 	}
 
 	public void Setup(UI ui)
@@ -50,11 +53,18 @@ public abstract class MenuPage : MonoBehaviour
 		Construct();
 	}
 
-    public virtual void Open()
-		=> gameObject.SetActive(true);
+    public virtual void Open(Action onClose)
+	{
+		this.onClose = onClose;
+		gameObject.SetActive(true);
+
+	}
 
 	public virtual void Close()
-		=> gameObject.SetActive(false);
+	{
+		onClose?.Invoke();
+		gameObject.SetActive(false);
+	}
 
 	protected virtual void Construct() { }
 
@@ -68,5 +78,6 @@ public abstract class MenuPage : MonoBehaviour
 
 	protected Canvas canvas;
 	protected UI ui;
+	protected Action onClose;
 
 }
