@@ -7,6 +7,7 @@ public class UI : MonoBehaviour
 	public void Setup(Manager manager)
 	{
 		this.manager = manager;
+		pages = GetComponentsInChildren<MenuPage>(true);
 		foreach (var item in pages)
 			item.Setup(this);
 	}
@@ -16,7 +17,6 @@ public class UI : MonoBehaviour
 
 	public Manager manager { get; private set; }
 
-	[SerializeField]
 	private MenuPage[] pages;
 
 	[SerializeField]

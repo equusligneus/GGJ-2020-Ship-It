@@ -538,6 +538,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3252940622505004949, guid: 84fb6ac5006079846924b4e60253ee31,
+        type: 3}
+      propertyPath: moveRoutine.commandDelay
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8757877336536914192, guid: 84fb6ac5006079846924b4e60253ee31,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -621,7 +626,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 687822083}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1681733713}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 05163255a11a29343b050259d31c7d8d, type: 3}
@@ -886,8 +891,8 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
-  orthographic size: 5
+  orthographic: 1
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1674,27 +1679,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6e58eac2c89fde4f94ba187650d3b9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1681733713 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9036907415426050988, guid: 84fb6ac5006079846924b4e60253ee31,
-    type: 3}
-  m_PrefabInstance: {fileID: 687822083}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1681733714
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1681733713}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 501a03ee19d0ec74f82b3fced03860fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tickRoutine:
-    tickTime: 1
-    ticksPerPhase: 120
 --- !u!114 &1706515443 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 125054365028935169, guid: 4671f052628b43d419c6fe871abdbaa4,
@@ -1908,6 +1892,11 @@ PrefabInstance:
       propertyPath: manager
       value: 
       objectReference: {fileID: 687822084}
+    - target: {fileID: 3008778854634238701, guid: 286a92190fd29cb41b02b84f6b250786,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5145853255399240602, guid: 286a92190fd29cb41b02b84f6b250786,
         type: 3}
       propertyPath: m_LocalPosition.x

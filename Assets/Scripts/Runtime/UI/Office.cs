@@ -47,7 +47,7 @@ public class Office : MonoBehaviour
 
 		if (!endPoint)
 			return false;
-
+		endPoint.Reserve();
 		currentNode.GetPathToRoot(ref path);
 		// remove start node if not moving
 		if(removeFirstElement)	

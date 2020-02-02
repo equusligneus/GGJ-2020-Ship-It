@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8757877336536914192}
   - component: {fileID: 9167632803072401526}
+  - component: {fileID: 3252940622505004949}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -43,7 +44,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05163255a11a29343b050259d31c7d8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tickTime: 1
-  ticksPerDay: 240
-  scenarioConfig: {fileID: 11400000, guid: ce598b4604802ca4e802c0ccb870d861, type: 2}
   taskList: {fileID: 0}
+  ui: {fileID: 0}
+  office: {fileID: 0}
+--- !u!114 &3252940622505004949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9036907415426050988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 501a03ee19d0ec74f82b3fced03860fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveRoutine:
+    devMoveDelay: 0.5
+  tickRoutine:
+    tickTime: 1
+    ticksPerPhase: 120

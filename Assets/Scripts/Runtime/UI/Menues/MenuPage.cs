@@ -38,19 +38,15 @@ public abstract class MenuPage : MonoBehaviour
 
 	}
 
-	protected virtual void Awake()
+	public void Setup(UI ui)
 	{
 		canvas = GetComponent<Canvas>();
 		s_typeToMenu.Add(type, this);
-		if (type != s_currentMenu)
-			Close();
-	}
-
-	public void Setup(UI ui)
-	{
 		this.ui = ui;
 		endGameButton.onClick.AddListener(ui.manager.CloseApplication);
 		Construct();
+		if (type != s_currentMenu)
+			Close();
 	}
 
     public virtual void Open(Action onClose)

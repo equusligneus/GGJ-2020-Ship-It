@@ -16,6 +16,9 @@ MonoBehaviour:
     name: Work Work
     devs:
     - {fileID: 11400000, guid: 636808db56820c3429de28b665831800, type: 2}
+    - {fileID: 11400000, guid: c3f5b85fc9d6ec644bb876cbcc5815fd, type: 2}
+    - {fileID: 11400000, guid: 53ffcc0ab0ca14c46bc71b4dfd8d9dc2, type: 2}
+    - {fileID: 11400000, guid: 9a03b326363c68348b14222fad8c5432, type: 2}
     tasks:
     - {fileID: 11400000, guid: 38271e3ef045af842b3c986308425718, type: 2}
     - {fileID: 11400000, guid: aaf117011d486f147b6b05e80abb920a, type: 2}

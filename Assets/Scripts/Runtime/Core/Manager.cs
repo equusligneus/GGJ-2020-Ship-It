@@ -64,6 +64,11 @@ public class Manager : MonoBehaviour
 		MenuPage.SwitchMenu(MenuPage.Type.Summary, onDone);
 	}
 
+	public void ShowInGameMenu()
+	{
+		MenuPage.SwitchMenu(MenuPage.Type.InGame);
+	}
+
 	public void TickUI()
 	{
 		ui.Tick(scenario.GetStatus());
@@ -77,4 +82,5 @@ public class Manager : MonoBehaviour
 		Application.Quit();
 #endif
 	}
+
 }

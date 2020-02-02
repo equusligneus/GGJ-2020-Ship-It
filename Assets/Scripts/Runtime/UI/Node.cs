@@ -113,6 +113,8 @@ public class Node : MonoBehaviour
 				break;
 		}
 
+		if (isReserved)
+			Gizmos.DrawLine(transform.position, transform.position + new Vector3(0, 1, 0));
 		Gizmos.DrawSphere(transform.position, 0.2f);
 
 		if (children == null)

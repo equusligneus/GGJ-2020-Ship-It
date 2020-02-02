@@ -5,7 +5,7 @@ public class Avatar : MonoBehaviour
 {
 	private void Update()
 	{
-		if(isMoving)
+		if (isMoving)
 		{
 			var position = path.Peek().transform.position;
 			transform.position = Vector3.MoveTowards(transform.position, position, Time.deltaTime);
@@ -14,6 +14,9 @@ public class Avatar : MonoBehaviour
 		}
 		if (headAnimator)
 			headAnimator.SetBool("isMoving", isMoving);
+
+		if (sprite)
+			SetSpriteZ();
 	}
 
 	public void Setup(Dev owner, Office office)
@@ -66,6 +69,13 @@ public class Avatar : MonoBehaviour
 		return false;
 	}
 
+	private void SetSpriteZ()
+	{
+		Vector3 spritePos = sprite.localPosition;
+		spritePos.z = zOffset + (transform.position.y - yZero) * yToZMultiplier;
+		sprite.localPosition = spritePos;
+	}
+
 	public bool isMoving
 		=> path.Count > 0;
 
@@ -74,6 +84,8 @@ public class Avatar : MonoBehaviour
 	private Node node = null;
 	private Queue<Node> path = new Queue<Node>();
 
+	[SerializeField]
+	private Transform sprite;
 
 	[SerializeField]
 	private SpriteRenderer body;
@@ -86,4 +98,11 @@ public class Avatar : MonoBehaviour
 
 	[SerializeField]
 	private SpeechBubble speechBubble;
+
+	[SerializeField]
+	private float zOffset;
+	[SerializeField]
+	private float yZero;
+	[SerializeField]
+	private float yToZMultiplier;
 }

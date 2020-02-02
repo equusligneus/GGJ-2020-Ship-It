@@ -69,20 +69,26 @@ public class Scenario
 		for (int i = 0; i < config.devs.Length; ++i)
 		{
 			activeDevs[i] = new Dev(config.devs[i].config, this, manager);
-			SetIdle(activeDevs[i]);
 		}
 	}
 
-	public void EnterDevs()
+	public int EnterDev()
 	{
-		foreach (var item in activeDevs)
-			item.Enter();
+		if (devsInGame >= activeDevs.Length)
+			return 0;
+
+		activeDevs[devsInGame].Enter();
+		++devsInGame;
+		return activeDevs.Length - devsInGame;
 	}
 
-	public void ExitDevs()
+	public int ExitDev()
 	{
-		foreach (var item in activeDevs)
-			item.Exit();
+		if (devsInGame <= 0)
+			return 0;
+		--devsInGame; 	
+		activeDevs[devsInGame].Exit();
+		return devsInGame;
 	}
 
 
@@ -132,6 +138,8 @@ public class Scenario
 	private Dev[] activeDevs;
 	private List<Task> activeTasks;
 	internal int daysLeft;
+
+	private int devsInGame = 0;
 	public bool areDevsMoving 
 	{ 
 		get 

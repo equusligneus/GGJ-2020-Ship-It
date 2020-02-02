@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a26120e144b90ea44946c915f44c95b7, type: 3}
+  m_Name: Cthulhu
+  m_EditorClassIdentifier: Assembly-CSharp::ProgrammerConfig
+  config:
+    name: Cthulhu
+    skill: 0
+    challengeEnjoymentCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    speed: 0
+    maxAnnoyance: 42
+    avatar: {fileID: 2245724781042666178, guid: 1e2b824f2a389d248ae9cf119c5d495d,
+      type: 3}
+    avatarColor: {r: 0.52331114, g: 0.0031594948, b: 0.6698113, a: 1}

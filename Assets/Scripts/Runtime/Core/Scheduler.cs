@@ -44,26 +44,51 @@ public class Scheduler : MonoBehaviour
 		public void Enter(Phase phase)
 		{
 			this.phase = phase;
+			scenario = scheduler.manager.scenario;
 			isActive = true;
+			SendCommand();
+			time = 0.0f;
+		}
+
+		public void Update()
+		{
+			if(remainingDevs > 0)
+			{
+				time += Time.deltaTime;
+				if(time > commandDelay)
+				{
+					time -= commandDelay;
+					SendCommand();
+				}
+			}
+			isActive = remainingDevs > 0 || scheduler.manager.scenario.areDevsMoving;
+		}
+
+		public void Exit() { }
+
+		private void SendCommand()
+		{
 			switch (phase)
 			{
 				case Phase.StartOfDay:
 				case Phase.EndOfLunchBreak:
-					scheduler.manager.scenario.EnterDevs();
+					remainingDevs = scheduler.manager.scenario.EnterDev();
 					break;
 				case Phase.StartOfLunchBreak:
 				case Phase.EndOfDay:
-					scheduler.manager.scenario.ExitDevs();
+					remainingDevs = scheduler.manager.scenario.ExitDev();
 					break;
 				default:
 					break;
 			}
 		}
 
-		public void Update() 
-			=> isActive = scheduler.manager.scenario.areDevsMoving;
+		[SerializeField]
+		private float commandDelay;
 
-		public void Exit() { }
+		private int remainingDevs;
+		private float time;
+		private Scenario scenario;
 	}
 
 	[System.Serializable]
@@ -87,6 +112,7 @@ public class Scheduler : MonoBehaviour
 			this.phase = phase;
 			currentTime = 0;
 			currentTick = 0;
+			scheduler.manager.ShowInGameMenu();
 		}
 
 		public void Update() 
