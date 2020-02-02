@@ -8,12 +8,15 @@ public class Manager : MonoBehaviour
 	{
 		scheduler = GetComponent<Scheduler>();
 		ui.Setup(this);
+		selector.onAvatarHovered += (Avatar a) => Debug.LogWarningFormat("Hovered {0}", (a ? a.name : "none"));
+		selector.onAvatarSelected += (Avatar a) => Debug.LogWarningFormat("Selected {0}", (a ? a.name : "none"));
 	}
 
 	public void SelectScenario(Config_Scenario scenario)
 	{
 		this.scenario = new Scenario(scenario.config, this);
 		scheduler.StartScenario(this);
+		MenuPage.SwitchMenu(MenuPage.Type.None);
 	}
 
 
@@ -35,6 +38,8 @@ public class Manager : MonoBehaviour
 
 	[SerializeField]
 	private UI ui;
+	[SerializeField]
+	private AvatarSelector selector;
 
 	[SerializeField]
 	private Office office;
@@ -47,26 +52,31 @@ public class Manager : MonoBehaviour
 	public void ShowStandup(Action onDone)
 	{
 		MenuPage.SwitchMenu(MenuPage.Type.StandUp, onDone);
+		TickUI();
 	}
 
 	public void ShowLunchBreak(Action onDone)
 	{
 		MenuPage.SwitchMenu(MenuPage.Type.LunchBreak, onDone);
+		TickUI();
 	}
 
 	public void ShowNight(Action onDone)
 	{
 		MenuPage.SwitchMenu(MenuPage.Type.Night, onDone);
+		TickUI();
 	}
 
 	public void ShowEnd(Action onDone)
 	{
 		MenuPage.SwitchMenu(MenuPage.Type.Summary, onDone);
+		TickUI();
 	}
 
 	public void ShowInGameMenu()
 	{
 		MenuPage.SwitchMenu(MenuPage.Type.InGame);
+		TickUI();
 	}
 
 	public void TickUI()
@@ -83,4 +93,11 @@ public class Manager : MonoBehaviour
 #endif
 	}
 
+	public Dev GetSelected()
+	{
+		if (selector.selected)
+			return selector.selected.owner;
+		Debug.LogError("Nobody selected!!!");
+		return null;
+	}
 }

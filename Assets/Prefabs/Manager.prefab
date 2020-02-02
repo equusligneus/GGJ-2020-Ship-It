@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   taskList: {fileID: 0}
   ui: {fileID: 0}
+  selector: {fileID: 0}
   office: {fileID: 0}
 --- !u!114 &3252940622505004949
 MonoBehaviour:
@@ -60,7 +61,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveRoutine:
-    devMoveDelay: 0.5
+    commandDelay: 0.5
   tickRoutine:
     tickTime: 1
     ticksPerPhase: 120

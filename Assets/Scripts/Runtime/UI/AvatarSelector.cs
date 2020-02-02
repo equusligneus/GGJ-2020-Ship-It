@@ -1,38 +1,43 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Camera))]
 public class AvatarSelector : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
+		camera = GetComponent<Camera>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown (0))
-        {
-            ScreenMouseRay();
-        }
-    } 
-public void ScreenMouseRay()
-    {
-        Vector3 mousePosition = Input.mousePosition;
-        mousePosition.z = 5f;
- 
-        Vector2 v = Camera.main.ScreenToWorldPoint(mousePosition);
- 
-        Collider2D[] col = Physics2D.OverlapPointAll(v);
- 
-        if(col.Length > 0){
-            foreach(Collider2D c in col)
-            {
-                Debug.Log("Collided with: " + c.GetComponent<Collider2D>().gameObject.name);
-                
-            }
-        }
+		// todo check for intersection with screen;
+		Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+		var hit = Physics2D.GetRayIntersection(ray);
+
+		Avatar newHovered = hit.collider ? hit.collider.GetComponent<Avatar>() : null;
+		if(newHovered != hovered)
+		{
+			hovered = newHovered;
+			onAvatarHovered?.Invoke(hovered);
+		}
+
+		// todo remove that check again hovered
+		Avatar newSelected = Input.GetMouseButtonDown(0) ? (hovered ? hovered : selected) : (Input.GetMouseButtonDown(1) ? null : selected);
+		if(newSelected != selected)
+		{
+			selected = newSelected;
+			onAvatarSelected?.Invoke(selected);
+		}
     }
+
+	private new Camera camera;
+	public Avatar hovered { get; private set; }
+	public Avatar selected { get; private set; }
+
+	public event Action<Avatar> onAvatarSelected;
+	public event Action<Avatar> onAvatarHovered;
 }

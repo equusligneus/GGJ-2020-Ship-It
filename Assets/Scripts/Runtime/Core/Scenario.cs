@@ -34,14 +34,28 @@ public class Scenario
 		public Config_Mood[] moods;
 	}
 
+	public struct TaskInfo
+	{
+		public Task task;
+		public List<Dev> devs;
+		public Action<Task> onAddToTask;
+	}
+
 	public struct Status
 	{
-		public Status(string name, List<Task> tasks, Dev[] devs)
+		public Status(string name, List<Task> tasks, Dev[] devs, Action<Task> onAddToTask)
 		{
 			this.name = name;
-			this.tasks = new Task.Status[tasks.Count];
-			for (int i = 0; i < this.tasks.Length; ++i)
-				this.tasks[i] = tasks[i].GetStatus(devs);
+			taskInfos = new TaskInfo[tasks.Count];
+			for (int i = 0; i < taskInfos.Length; ++i)
+			{
+				taskInfos[i].task = tasks[i];
+				taskInfos[i].devs = new List<Dev>();
+				for (int j = 0; j < devs.Length; ++j)
+					if (devs[j].GetStatus().task == tasks[i])
+						taskInfos[i].devs.Add(devs[j]);
+				taskInfos[i].onAddToTask = onAddToTask;
+			}
 
 			this.devs = new Dev.Status[devs.Length];
 			for (int i = 0; i < this.devs.Length; ++i)
@@ -49,7 +63,7 @@ public class Scenario
 		}
 
 		public string name;
-		public Task.Status[] tasks;
+		public TaskInfo[] taskInfos;
 		public Dev.Status[] devs;
 	}
 
@@ -126,12 +140,17 @@ public class Scenario
 	}
 
 	public Status GetStatus()
-		=> new Status(config.name, activeTasks, activeDevs);
+		=> new Status(config.name, activeTasks, activeDevs, AddSelectedToTask);
 
 
 	public Mood GetNeutralMood()
 		=> new Mood(config.neutralMood.config);
 
+
+	private void AddSelectedToTask(Task task)
+	{
+		SetToTask(manager.GetSelected(), task);
+	}
 
 	private Manager manager;
 	private Config config;

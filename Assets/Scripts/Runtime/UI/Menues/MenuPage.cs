@@ -38,6 +38,12 @@ public abstract class MenuPage : MonoBehaviour
 
 	}
 
+	public static void Tick(Scenario.Status status)
+	{
+		if (s_typeToMenu.ContainsKey(s_currentMenu))
+			s_typeToMenu[s_currentMenu].Tick_Internal(status);
+	}
+
 	public void Setup(UI ui)
 	{
 		canvas = GetComponent<Canvas>();
@@ -61,6 +67,8 @@ public abstract class MenuPage : MonoBehaviour
 		onClose?.Invoke();
 		gameObject.SetActive(false);
 	}
+
+	protected virtual void Tick_Internal(Scenario.Status status)	{	}
 
 	protected virtual void Construct() { }
 

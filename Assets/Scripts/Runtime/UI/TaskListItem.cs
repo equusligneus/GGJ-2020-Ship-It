@@ -1,27 +1,33 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
-public class TaskListItem
+public class TaskListItem : MonoBehaviour
 {
-	public TaskListItem(Task.Status task)
+	public void Tick(Scenario.TaskInfo info)
 	{
-		this.task = task;
+		var taskStatus = info.task.GetStatus();
+
+		name.text = taskStatus.name;
+		progress.value = taskStatus.workPercentage;
+		for(int i = 0; i < programmers.Length; ++i)
+		{
+			bool show = i < info.devs.Count;
+			programmers[i].enabled = show;
+			if(show)		
+				programmers[i].text = info.devs[i].GetStatus().name;
+		}
+
+		addButton.onClick.RemoveAllListeners();
+		addButton.interactable = !taskStatus.isDone;
+		addButton.onClick.AddListener(() => { info.onAddToTask?.Invoke(info.task); });
 	}
 
-	public void Show()
-	{
-		GUILayout.BeginVertical();
-
-		GUILayout.BeginHorizontal();
-		GUILayout.Label(task.name);
-		GUILayout.Label("" + (task.workPercentage * 100) + "%");
-		GUILayout.EndHorizontal();
-
-		GUILayout.BeginHorizontal();
-		foreach (var item in task.programmers)
-			GUILayout.Label(item.name);
-		GUILayout.EndHorizontal();
-		GUILayout.EndVertical();
-	}
-
-	private readonly Task.Status task;
+	[SerializeField]
+	private Text name;
+	[SerializeField]
+	private Slider progress;
+	[SerializeField]
+	private Text[] programmers;
+	[SerializeField]
+	private Button addButton;
 }

@@ -28,25 +28,31 @@ public class Task
 
 	public struct Status
 	{
-		public Status(Config config, float currentWork, Dev.Status[] programmers)
+		public Status(Config config)
 		{
-			name = config.name;
-			type = config.type;
-			workPercentage = currentWork / config.work;
-			isDone = workPercentage >= 1.0f;
-			this.programmers = programmers;
+			work = 0;
+			this.config = config;
 		}
 
-		public readonly string name;
-		public readonly TaskType type;
-		public float workPercentage;
-		public bool isDone;
-		public Dev.Status[] programmers;
+		public float workPercentage
+			=> work / config.work;
+		public bool isDone
+			=> workPercentage >= 1.0f;
+
+		public string name
+			=> config.name;
+
+		public TaskType type
+			=> config.type;
+
+		public float work;
+		private Config config;
 	}
 
 	public Task(Config config)
 	{
 		this.config = config;
+		status = new Status(config);
 	}
 
 	public TaskType GetTaskType()
@@ -55,15 +61,19 @@ public class Task
 	public Config GetConfig()
 		=> config;
 
-	[SerializeField]
-	private Config config;
-
-	public float CurrentWork { get; private set; }
+	public Status GetStatus()
+		=> status;
 
 	public bool IsDone
-		=> CurrentWork >= config.work;
+		=> status.isDone;
+
+	private Config config;
+
+	private Status status;
 
 	float bugPotential;
+
+
 
 // moving to Scheduler
 /*
@@ -77,26 +87,6 @@ public class Task
 		if (config.type == TaskType.Idle || config.type == TaskType.Relaxing)
 			return;
 
-		CurrentWork = Mathf.Min(CurrentWork + progress, config.work);
-	}
-/*
-	public void EndDay()
-	{
-
-	}
-*/
-	public Status GetStatus(Dev[] Devs)
-	{
-		List<Dev.Status> involvedDevs = new List<Dev.Status>();
-		if(!IsDone)
-		{
-			foreach(var item in Devs)
-			{
-				if (item.GetStatus().task == this)
-					involvedDevs.Add(item.GetStatus());
-			}
-		}
-
-		return new Status(config, CurrentWork, involvedDevs.ToArray());
+		status.work = Mathf.Min(status.work + progress, config.work);
 	}
 }

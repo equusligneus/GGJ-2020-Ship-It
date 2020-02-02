@@ -8,10 +8,11 @@ public class Avatar : MonoBehaviour
 		if (isMoving)
 		{
 			var position = path.Peek().transform.position;
-			transform.position = Vector3.MoveTowards(transform.position, position, Time.deltaTime);
+			transform.position = Vector3.MoveTowards(transform.position, position, 10 * Time.deltaTime);
 			if ((position - transform.position).sqrMagnitude < 0.001)
 				node =	path.Dequeue();
 		}
+
 		if (headAnimator)
 			headAnimator.SetBool("isMoving", isMoving);
 
@@ -47,7 +48,7 @@ public class Avatar : MonoBehaviour
 		office.PlotPathToNodeType(Node.Type.Portal, node, ref path, isMoving);
 	}
 
-	public void SetMood(Dev dev)
+	public void SetMood()
 	{
 		// set the mood of the dev
 	}
@@ -79,7 +80,7 @@ public class Avatar : MonoBehaviour
 	public bool isMoving
 		=> path.Count > 0;
 
-	private Dev owner = null;
+	public Dev owner { get; private set; }
 	private Office office = null;
 	private Node node = null;
 	private Queue<Node> path = new Queue<Node>();

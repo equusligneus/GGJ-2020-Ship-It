@@ -13,7 +13,7 @@ public class UI : MonoBehaviour
 	}
 
 	public void Tick(Scenario.Status scenarioStatus)
-	{ }
+		=> MenuPage.Tick(scenarioStatus);
 
 	public Manager manager { get; private set; }
 
